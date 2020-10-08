@@ -5,5 +5,5 @@
 #### 二、如何运行
 - 在unity上创建一个新项目
 - 将Assets拷贝到新项目的Assets文件夹上
-- 打开项目，将Assets/Scenes下的PriestsAndDevilsV2场景拉到Hierarchy中
+- 打开项目，将Assets/下的PriestsAndDevilsV2场景拉到Hierarchy中
 - 点击运行
