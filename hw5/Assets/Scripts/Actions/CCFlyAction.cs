@@ -22,16 +22,19 @@ public class CCFlyAction : SSAction
     public override void Update()
     {
         //Debug.Log("flyaction update");
-        if (this.transform == null) {//飞碟已经被销毁
-            //Debug.Log("飞碟被销毁啦");
+        if (this.transform.gameObject.activeSelf == false) {//飞碟已经被"销毁"
+            Debug.Log("1");
             this.destroy = true;
             this.callback.SSActionEvent(this);
             return;
         }
+        
         Vector3 vec3 = Camera.main.WorldToScreenPoint (this.transform.position);
         if (vec3.x < -100 || vec3.x > Camera.main.pixelWidth + 100 || vec3.y < -100 || vec3.y > Camera.main.pixelHeight + 100) {
+            Debug.Log("2");
             this.destroy = true;
             this.callback.SSActionEvent(this);
+            return;
         }
         transform.position += new Vector3(speedX, speedY, 0) * Time.deltaTime * 2;
         

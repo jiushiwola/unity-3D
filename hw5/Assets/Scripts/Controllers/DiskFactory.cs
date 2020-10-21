@@ -16,16 +16,16 @@ public class DiskAttributes : MonoBehaviour
 public class DiskFactory : MonoBehaviour
 {
     
-    List<DiskAttributes> used;
-    List<DiskAttributes> free;
+    List<GameObject> used;
+    List<GameObject> free;
     System.Random rand;
 
     // Start is called before the first frame update
     void Start()
     {
         
-        used = new List<DiskAttributes>();
-        free = new List<DiskAttributes>();
+        used = new List<GameObject>();
+        free = new List<GameObject>();
         rand = new System.Random();
         //Disk disk = GetDisk(1); 
     }
@@ -39,14 +39,15 @@ public class DiskFactory : MonoBehaviour
     public GameObject GetDisk(int round) {
         GameObject disk;
         if (free.Count != 0) {
-            disk = free[0].gameObject;
-            free.RemoveAt(0);
-            used.Add(free[0]);
+            disk = free[0];
+            //used.Add(free[0]);
+            free.Remove(disk);
+            //disk.SetActive(true);
         }
         else {
             disk = GameObject.Instantiate(Resources.Load("Prefabs/disk", typeof(GameObject))) as GameObject;
             disk.AddComponent<DiskAttributes>();
-            used.Add(disk.GetComponent<DiskAttributes>());
+            //used.Add(disk.GetComponent<DiskAttributes>());
         }
         
         //根据不同round设置diskAttributes的值
@@ -60,7 +61,7 @@ public class DiskFactory : MonoBehaviour
         attri.speedX = (rand.Next(1,5) + attri.score + round) * 0.2f;
         attri.speedY = (rand.Next(1,5) + attri.score + round) * 0.2f;
         
-
+        
         if (attri.score == 3) {
             disk.GetComponent<Renderer>().material.color = Color.red;
             disk.transform.localScale += new Vector3(-0.5f,0,-0.5f);
@@ -96,15 +97,22 @@ public class DiskFactory : MonoBehaviour
             disk.transform.Translate(Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight * 0f, 8)));
             attri.speedX *= -1;
         }
+        used.Add(disk);
+        disk.SetActive(true);
+        Debug.Log("generate disk");
         return disk;
     }
 
     public void FreeDisk(GameObject disk) {
-        DiskAttributes attri = disk.GetComponent<DiskAttributes>();
-        if (!used.Contains(attri)) {
+        disk.SetActive(false);
+        //将位置和大小恢复到预制，这点很重要！
+        disk.transform.position = new Vector3(0, 0,0);
+        disk.transform.localScale = new Vector3(2f,0.1f,2f);
+        if (!used.Contains(disk)) {
             throw new MyException("Try to remove a item from a list which doesn't contain it.");
         }
-        used.Remove(attri);
-        free.Add(attri);
+        Debug.Log("free disk");
+        used.Remove(disk);
+        free.Add(disk);
     }
 }

@@ -91,8 +91,9 @@ public class RoundController : MonoBehaviour, ISceneController, IUserAction
                 //print(hit);
 				//DestroyImmediate (hit.transform.gameObject);
 
-                Destroy (hit.transform.gameObject);
-                
+                //Destroy (hit.transform.gameObject);
+                hit.transform.gameObject.SetActive(false);
+                //factory.FreeDisk(hit.transform.gameObject);
                 // if (hit.transform == null) {
                 //     print("Yes");
                 // }

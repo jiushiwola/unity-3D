@@ -6,12 +6,14 @@ public class CCActionManager : SSActionManager, IActionCallback
 {
     public RoundController sceneController;
     public CCFlyAction action;
+    public DiskFactory factory;
     
     // Start is called before the first frame update
     protected new void Start()
     {
         sceneController = (RoundController)SSDirector.getInstance().currentSceneController;
         sceneController.actionManager = this;
+        factory = Singleton<DiskFactory>.Instance;
     }
 
     // Update is called once per frame
@@ -25,10 +27,11 @@ public class CCActionManager : SSActionManager, IActionCallback
         int intParam = 0,
         string strParam = null,
         Object objectParam = null) {
-            Debug.Log("飞碟被击中或飞出视界，动作结束，飞碟被销毁");
-            if (source.transform != null) {
-                Destroy(source.transform.gameObject);
-            }
+            // Debug.Log("飞碟被击中或飞出视界，动作结束，飞碟被销毁");
+            // if (source.transform != null) {
+            //     Destroy(source.transform.gameObject);
+            // }
+            factory.FreeDisk(source.transform.gameObject);
     }
 
     public void MoveDisk(GameObject disk) {
